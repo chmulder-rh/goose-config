@@ -1,4 +1,11 @@
 GOOSE_TELEMETRY_ENABLED: false
+CONTEXT_FILE_NAMES: 
+- CLAUDE.md
+- .goosehints
+- AGENTS.md
+GOOSE_SHOW_FULL_OUTPUT: true
+GOOSE_DEBUG: true
+GOOSE_NO_CODE_TRUNCATION: true
 GCP_PROJECT_ID: itpc-ca-0ebb0cab5e
 GCP_LOCATION: global
 GOOSE_THINKING_EFFORT: medium
@@ -20,7 +27,7 @@ slash_commands:
 providers:
   gcp_vertex_ai:
     enabled: true
-    model: claude-haiku-4-5@20251001
+    model: claude-sonnet-5
     configured: true
 extensions:
   code_execution:
