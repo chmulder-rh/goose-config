@@ -1,9 +1,3 @@
-user:
-  always_allow:
-  - shell
-  - load_skill
-  ask_before: []
-  never_allow: []
 smart_approve:
   always_allow: []
   ask_before:
@@ -14,4 +8,8 @@ smart_approve:
   - shell
   - todo__todo_write
   - write
+  never_allow: []
+user:
+  always_allow: []
+  ask_before: []
   never_allow: []
