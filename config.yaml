@@ -28,6 +28,8 @@ slash_commands:
   recipe_path: ~/.config/goose/recipes/rpi-implement.yaml
 - command: iterate_plan
   recipe_path: ~/.config/goose/recipes/rpi-iterate.yaml
+- command: jira
+  recipe_path: ~/.config/goose/recipes/create-jira-issue.yaml
 providers:
   gcp_vertex_ai:
     enabled: true

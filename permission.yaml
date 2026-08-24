@@ -11,6 +11,7 @@ smart_approve:
   - write
   never_allow: []
 user:
-  always_allow: []
+  always_allow:
+  - shell
   ask_before: []
   never_allow: []
