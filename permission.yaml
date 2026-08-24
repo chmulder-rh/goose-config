@@ -1,15 +1,16 @@
-user:
-  always_allow: []
-  ask_before: []
-  never_allow: []
 smart_approve:
   always_allow: []
   ask_before:
   - load_skill
+  - delegate
   - edit
   - extensionmanager__manage_extensions
   - read_image
   - shell
   - todo__todo_write
   - write
+  never_allow: []
+user:
+  always_allow: []
+  ask_before: []
   never_allow: []
