@@ -21,23 +21,27 @@ GOOSE_FAST_MODEL: claude-haiku-4-5
 active_provider: gcp_vertex_ai
 slash_commands:
 - command: research_codebase
-  recipe_path: ~/.config/goose/recipes/rpi-research.yaml
+  recipe_path: /home/chmulder/.config/goose/recipes/rpi-research.yaml
 - command: create_plan
-  recipe_path: ~/.config/goose/recipes/rpi-plan.yaml
+  recipe_path: /home/chmulder/.config/goose/recipes/rpi-plan.yaml
 - command: implement_pan
-  recipe_path: ~/.config/goose/recipes/rpi-implement.yaml
+  recipe_path: /home/chmulder/.config/goose/recipes/rpi-implement.yaml
 - command: iterate_plan
-  recipe_path: ~/.config/goose/recipes/rpi-iterate.yaml
-- command: jira
-  recipe_path: ~/.config/goose/recipes/create-jira-issue.yaml
+  recipe_path: /home/chmulder/.config/goose/recipes/rpi-iterate.yaml
+- command: exton
+  recipe_path: /home/chmulder/.config/goose/recipes/extension-enable.yaml
+- command: extoff
+  recipe_path: /home/chmulder/.config/goose/recipes/extension-disable.yaml
+- command: extls
+  recipe_path: /home/chmulder/.config/goose/recipes/extension-list.yaml
 providers:
   gcp_vertex_ai:
     enabled: true
-    model: claude-sonnet-4-6
+    model: claude-haiku-4-5
     configured: true
 extensions:
   code_execution:
-    enabled: true
+    enabled: false
     type: platform
     name: code_execution
     description: Goose will make extension calls through code execution, saving tokens
@@ -65,7 +69,7 @@ extensions:
     display_name: Summon
     bundled: true
   summarize:
-    enabled: true
+    enabled: false
     type: platform
     name: summarize
     description: Load files/directories and get an LLM summary in a single call
@@ -108,7 +112,7 @@ extensions:
     display_name: Skills
     bundled: true
   tom:
-    enabled: true
+    enabled: false
     type: platform
     name: tom
     description: Inject custom context into every turn via GOOSE_MOIM_MESSAGE_TEXT and GOOSE_MOIM_MESSAGE_FILE environment variables
@@ -160,14 +164,15 @@ extensions:
     display_name: Tutorial
     timeout: 300
     bundled: true
-  atlassian-rovo:
-    name: Atlassian Rovo
+  rovo:
+    name: rovo
+    display_name: Atlassian Rovo
     type: streamable_http
     uri: https://mcp.atlassian.com/v1/mcp/authv2
-    enabled: true
+    enabled: false
     timeout: 300
     headers:
       Authorization: $ATLASSIAN_AUTH
     envs:
-      ATLASSIAN_CLOUD_ID: 2b9e35e3-6bd3-4cec-b838-f4249ee02432
-      ATLASSIAN_INSTANCE: redhat.atlassian.net
+      ATLASSIAN_CLOUD_ID: $ATLASSIAN_CLOUD_ID
+      ATLASSIAN_INSTANCE: $ATLASSIAN_INSTANCE

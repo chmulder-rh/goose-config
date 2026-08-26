@@ -1,0 +1,5 @@
+version: "1.0.0"
+title: "List Active Extensions"
+description: "Show extensions currently enabled in this session"
+
+prompt: search_available_extensions()

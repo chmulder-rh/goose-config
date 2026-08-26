@@ -1,17 +1,34 @@
+user:
+  always_allow:
+  - shell
+  ask_before: []
+  never_allow: []
 smart_approve:
   always_allow: []
   ask_before:
   - load_skill
   - delegate
+  - final_output
+  - recipe__final_output
+  - atlassianrovo__addCommentToJiraIssue
+  - atlassianrovo__addTeamworkGraphContext
+  - atlassianrovo__addWorklogToJiraIssue
+  - atlassianrovo__createCompassComponent
+  - atlassianrovo__createCompassComponentRelationship
+  - atlassianrovo__createCompassCustomFieldDefinition
+  - atlassianrovo__createConfluenceFooterComment
+  - atlassianrovo__createConfluenceInlineComment
+  - atlassianrovo__createConfluencePage
+  - atlassianrovo__createIssueLink
+  - atlassianrovo__createJiraIssue
+  - atlassianrovo__editJiraIssue
+  - atlassianrovo__transitionJiraIssue
+  - atlassianrovo__updateConfluencePage
+  - execute_typescript
   - edit
   - extensionmanager__manage_extensions
   - read_image
   - shell
   - todo__todo_write
   - write
-  never_allow: []
-user:
-  always_allow:
-  - shell
-  ask_before: []
   never_allow: []

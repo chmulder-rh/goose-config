@@ -1,0 +1,11 @@
+version: "1.0.0"
+title: "Enable Extension"
+description: "Add an extension to the current session"
+
+parameters:
+  - key: extension_name
+    input_type: string
+    requirement: required
+    description: "Name of the extension to enable (e.g., 'atlassian-rovo', 'summarize')"
+
+prompt: manage_extensions(action="enable", extension_name="{{ extension_name }}")

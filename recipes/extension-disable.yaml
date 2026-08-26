@@ -1,0 +1,11 @@
+version: "1.0.0"
+title: "Disable Extension"
+description: "Remove an extension from the current session"
+
+parameters:
+  - key: extension_name
+    input_type: string
+    requirement: required
+    description: "Name of the extension to disable"
+
+prompt: manage_extensions(action="disable", extension_name="{{ extension_name }}")
