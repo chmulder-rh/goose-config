@@ -1,0 +1,32 @@
+version: "1.0.0"
+title: "Get Jira issue"
+description: "Get a Jira issue using issue_id"
+
+parameters:
+  - key: issue_id
+    input_type: string
+    requirement: required
+    description: "Jira issue ID or key"
+
+prompt: |
+  rovo__getJiraIssue(
+    cloudId=$(printenv ATLASSIAN_INSTANCE),
+    issueIdOrKey="{{ issue_id }}",
+    fields=["summary", "description", "status", "issuetype", "assignee", "comment"],
+    responseContentFormat="markdown"
+  )
+
+extensions:
+  - type: streamable_http
+    name: rovo
+    display_name: "Atlassian Rovo MCP Server"
+    description: "MCP server for Atlassian Jira and Confluence integration"
+    uri: https://mcp.atlassian.com/v1/mcp/authv2
+    timeout: 300
+    headers:
+      Authorization: $ATLASSIAN_AUTH
+    env_keys:
+      - ATLASSIAN_AUTH
+    envs:
+      ATLASSIAN_CLOUD_ID: $ATLASSIAN_CLOUD_ID
+      ATLASSIAN_INSTANCE: $ATLASSIAN_INSTANCE

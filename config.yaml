@@ -34,6 +34,8 @@ slash_commands:
   recipe_path: /home/chmulder/.config/goose/recipes/extension-disable.yaml
 - command: extls
   recipe_path: /home/chmulder/.config/goose/recipes/extension-list.yaml
+- command: jiraget
+  recipe_path: /home/chmulder/.config/goose/recipes/jira-issue-get.yaml
 providers:
   gcp_vertex_ai:
     enabled: true
@@ -166,7 +168,8 @@ extensions:
     bundled: true
   rovo:
     name: rovo
-    display_name: Atlassian Rovo
+    display_name: "Atlassian Rovo MCP Server"
+    description: "MCP server for Atlassian Jira and Confluence integration"
     type: streamable_http
     uri: https://mcp.atlassian.com/v1/mcp/authv2
     enabled: false
@@ -174,5 +177,6 @@ extensions:
     headers:
       Authorization: $ATLASSIAN_AUTH
     envs:
+      ATLASSIAN_AUTH: $ATLASSIAN_AUTH
       ATLASSIAN_CLOUD_ID: $ATLASSIAN_CLOUD_ID
       ATLASSIAN_INSTANCE: $ATLASSIAN_INSTANCE
