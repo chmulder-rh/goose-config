@@ -1,0 +1,19 @@
+# User preferences
+
+## Shell commands
+
+- Prefer writing temporary files to the current project's `./tmp` folder.
+- Never run `git add` and `git commit` commands. Show them instead.
+- Never run 'test', 'build' or 'install' commands. Show them instead.
+
+## Programming
+
+### General
+
+- Avoid large function bodies of 20 lines or more. Rather split into multiple smaller functions of 15 lines or less. 
+- Function and variable names should be self documenting.
+
+## TypeScript 
+  
+- Fix types at the source, not at the call site.
+- Prefer named reusable types/interfaces over inline shapes and casts.

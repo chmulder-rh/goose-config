@@ -5,6 +5,7 @@ CONTEXT_FILE_NAMES:
 - AGENTS.md
 GOOSE_SHOW_FULL_OUTPUT: true
 GOOSE_DEBUG: false
+GOOSE_CLI_SHOW_THINKING: true
 GOOSE_NO_CODE_TRUNCATION: true
 GCP_PROJECT_ID: itpc-ca-0ebb0cab5e
 GCP_LOCATION: global
@@ -16,9 +17,10 @@ GOOSE_THINKING_EFFORT: medium
 GOOSE_CLI_SHOW_COST: true
 GOOSE_MODE: approve
 GOOSE_PLANNER_PROVIDER: gcp_vertex_ai
+GOOSE_MAX_TOKENS: 16384
 GOOSE_PLANNER_MODEL: gemini-2.5-pro
 GOOSE_FAST_MODEL: claude-haiku-4-5
-active_provider: openai
+active_provider: gcp_vertex_ai
 slash_commands:
 - command: research_codebase
   recipe_path: /home/chmulder/.config/goose/recipes/rpi-research.yaml
@@ -180,7 +182,6 @@ extensions:
     timeout: 300
     headers:
       Authorization: $ATLASSIAN_AUTH
-    envs:
-      ATLASSIAN_AUTH: $ATLASSIAN_AUTH
-      ATLASSIAN_CLOUD_ID: $ATLASSIAN_CLOUD_ID
-      ATLASSIAN_INSTANCE: $ATLASSIAN_INSTANCE
+    env_keys:
+      - ATLASSIAN_AUTH
+GOOSE_CLI_THEME: dark
