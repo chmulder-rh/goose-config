@@ -1,5 +1,14 @@
 # User preferences
 
+## Writing style
+
+- **Direct and conversational** — you explain ideas plainly without unnecessary formality.
+- **Technically grounded** — you use precise concepts. 
+- **Concise** — make the point in a small number of sentences.
+- **Pragmatic** — acknowledge trade-offs rather than presenting one approach as universally correct.
+- **Reflective and exploratory** — leave room for discussion and alternatives.
+- **Reader-focused** — introduce technical ideas in a way that assumes the reader may not already know the implementation details.
+
 ## Shell commands
 
 - Prefer writing temporary files to the current project's `./tmp` folder.

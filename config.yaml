@@ -1,4 +1,5 @@
 GOOSE_TELEMETRY_ENABLED: false
+GOOSE_CLI_THEME: dark
 CONTEXT_FILE_NAMES:
 - CLAUDE.md
 - .goosehints
@@ -19,7 +20,7 @@ GOOSE_MODE: approve
 GOOSE_PLANNER_PROVIDER: gcp_vertex_ai
 GOOSE_MAX_TOKENS: 16384
 GOOSE_PLANNER_MODEL: gemini-2.5-pro
-GOOSE_FAST_MODEL: claude-haiku-4-5
+GOOSE_FAST_MODEL: gemini-3.6-flash
 active_provider: gcp_vertex_ai
 slash_commands:
 - command: research_codebase
@@ -41,7 +42,7 @@ slash_commands:
 providers:
   gcp_vertex_ai:
     enabled: true
-    model: claude-haiku-4-5
+    model: gemini-3.6-flash
     configured: true
   openai:
     enabled: true
@@ -183,5 +184,4 @@ extensions:
     headers:
       Authorization: $ATLASSIAN_AUTH
     env_keys:
-      - ATLASSIAN_AUTH
-GOOSE_CLI_THEME: dark
+    - ATLASSIAN_AUTH
