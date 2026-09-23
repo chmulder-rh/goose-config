@@ -10,7 +10,7 @@ parameters:
 
 prompt: |
   rovo__getJiraIssue(
-    cloudId=$(printenv ATLASSIAN_INSTANCE),
+    cloudId="2b9e35e3-6bd3-4cec-b838-f4249ee02432",
     issueIdOrKey="{{ issue_id }}",
     fields=["summary", "description", "status", "issuetype", "assignee", "comment"],
     responseContentFormat="markdown"
@@ -22,8 +22,4 @@ extensions:
     display_name: "Atlassian Rovo MCP Server"
     description: "MCP server for Atlassian Jira and Confluence integration"
     uri: https://mcp.atlassian.com/v2/mcp
-    scopes:
-      - read:jira:agent-interface
-      - search:jira:agent-interface
     timeout: 300
-

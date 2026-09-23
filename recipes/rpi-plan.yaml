@@ -219,7 +219,7 @@ instructions: |
 parameters:
   - key: ticket_or_context
     input_type: string
-    requirement: optional
+    requirement: user_prompt
     default: ""
     description: "Path to ticket file or context for the plan"
 
