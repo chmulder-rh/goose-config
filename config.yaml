@@ -14,22 +14,20 @@ GCP_MAX_RATE_LIMIT_RETRIES: 10
 GCP_INITIAL_RETRY_INTERVAL_MS: 3000
 GCP_BACKOFF_MULTIPLIER: 2.0
 GCP_MAX_RETRY_INTERVAL_MS: 180000
-GOOSE_THINKING_EFFORT: medium
+GEMINI3_THINKING_LEVEL: high
+GOOSE_THINKING_EFFORT: high
 GOOSE_CLI_SHOW_COST: true
 GOOSE_MODE: approve
-GOOSE_PLANNER_PROVIDER: gcp_vertex_ai
 GOOSE_MAX_TOKENS: 16384
-GOOSE_PLANNER_MODEL: gemini-2.5-pro
-GOOSE_FAST_MODEL: gemini-3.8-flash
 active_provider: gcp_vertex_ai
 slash_commands:
-- command: research_codebase
+- command: research
   recipe_path: /home/chmulder/.config/goose/recipes/rpi-research.yaml
-- command: create_plan
+- command: plan
   recipe_path: /home/chmulder/.config/goose/recipes/rpi-plan.yaml
-- command: implement_pan
+- command: implement
   recipe_path: /home/chmulder/.config/goose/recipes/rpi-implement.yaml
-- command: iterate_plan
+- command: iterate
   recipe_path: /home/chmulder/.config/goose/recipes/rpi-iterate.yaml
 - command: exton
   recipe_path: /home/chmulder/.config/goose/recipes/extension-enable.yaml
