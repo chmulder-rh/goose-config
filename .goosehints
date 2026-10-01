@@ -12,8 +12,12 @@
 ## Shell commands
 
 - Prefer writing temporary files to the current project's `./tmp` folder.
-- Never run `git add` and `git commit` commands. Show them instead.
 - Never run 'test', 'build' or 'install' commands. Show them instead.
+
+### Git
+
+- Never run `git add` and `git commit` commands. Show them instead.
+- Don't use git worktrees. Use git branches.
 
 ## Programming
 
@@ -26,3 +30,4 @@
   
 - Fix types at the source, not at the call site.
 - Prefer named reusable types/interfaces over inline shapes and casts.
+

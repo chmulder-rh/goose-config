@@ -1,6 +1,8 @@
 user:
   always_allow:
   - shell
+  - todo__todo_write
+  - load
   ask_before: []
   never_allow: []
 smart_approve:
@@ -25,6 +27,7 @@ smart_approve:
   - atlassianrovo__transitionJiraIssue
   - atlassianrovo__updateConfluencePage
   - execute_typescript
+  - load
   - edit
   - extensionmanager__manage_extensions
   - read_image

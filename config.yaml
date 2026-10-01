@@ -1,4 +1,6 @@
 GOOSE_TELEMETRY_ENABLED: false
+GOOSE_CONTEXT_LIMIT: 200000
+GOOSE_AUTO_COMPACT_THRESHOLD: 0.85
 GOOSE_CLI_THEME: dark
 CONTEXT_FILE_NAMES:
 - CLAUDE.md
@@ -37,14 +39,16 @@ slash_commands:
   recipe_path: /home/chmulder/.config/goose/recipes/extension-list.yaml
 - command: jiraget
   recipe_path: /home/chmulder/.config/goose/recipes/jira-issue-get.yaml
+- command: jira-issue-get
+  recipe_path: /home/chmulder/.config/goose/recipes/jira-issue-get.yaml
 providers:
   gcp_vertex_ai:
     enabled: true
-    model: gemini-3.8-flash
+    model: gemini-2.5-flash-lite
     configured: true
   openai:
     enabled: true
-    model: gpt-5.4-mini
+    model: gpt-6-luna-high
     configured: true
 extensions:
   code_execution:
@@ -176,6 +180,6 @@ extensions:
     display_name: Atlassian Rovo MCP Server
     description: MCP server for Atlassian Jira and Confluence integration
     type: streamable_http
-    uri: https://mcp.atlassian.com/v1/mcp/authv2
+    uri: https://mcp.atlassian.com/v2/mcp
     enabled: false
     timeout: 300

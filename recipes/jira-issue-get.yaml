@@ -8,6 +8,11 @@ parameters:
     requirement: required
     description: "Jira issue ID or key"
 
+instructions: |
+  Use only the rovo__getJiraIssue tool to retrieve the issue. If Rovo is
+  unavailable or authentication fails, explain the blocker and stop. Do not
+  use Jira REST, shell commands, or another source as a fallback.
+
 prompt: |
   rovo__getJiraIssue(
     cloudId="2b9e35e3-6bd3-4cec-b838-f4249ee02432",
