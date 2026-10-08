@@ -20,8 +20,8 @@ GEMINI3_THINKING_LEVEL: high
 GOOSE_THINKING_EFFORT: high
 GOOSE_CLI_SHOW_COST: true
 GOOSE_MODE: approve
-GOOSE_MAX_TOKENS: 16384
-active_provider: gcp_vertex_ai
+GOOSE_MAX_TOKENS: 30000
+active_provider: openai
 slash_commands:
 - command: research
   recipe_path: /home/chmulder/.config/goose/recipes/rpi-research.yaml
