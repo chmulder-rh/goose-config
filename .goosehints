@@ -11,23 +11,27 @@
 
 ## Shell commands
 
-- Prefer writing temporary files to the current project's `./tmp` folder.
-- Never run 'test', 'build' or 'install' commands. Show them instead.
+- Prefer writing temporary files to the current project's `./tmp` folder when it exists and is ignored by Git; otherwise use a system temporary directory.
+- Never run commands that execute tests, builds or installs, regardless of command name. Show them instead.
 
 ### Git
 
 - Never run `git add` and `git commit` commands. Show them instead.
-- Don't use git worktrees. Use git branches.
+- Don't use git worktrees. If a separate checkout is needed, ask the user to create a branch.
 
 ## Programming
 
 ### General
 
-- Avoid large function bodies of 20 lines or more. Rather split into multiple smaller functions of 15 lines or less. 
+- Prefer short, focused functions; split longer functions when doing so improves clarity.
 - Function and variable names should be self documenting.
+- Code should be easy for humans to read and understand. Keep it simple.
+- Use functional programming or composition techniques so code is easy to test. 
+- Write tests before implementation where practical, but don't run them; show the user the commands to run.
+- Don't overcomplicate the tests. Start with happy day and obvious edge cases. 
+- Prefer tests that don't write to the filesystem. When testing filesystem behavior, use an isolated temporary directory and clean up afterward.
 
 ## TypeScript 
   
 - Fix types at the source, not at the call site.
-- Prefer named reusable types/interfaces over inline shapes and casts.
-
+- Prefer named types/interfaces for reused or meaningful shapes; avoid unnecessary casts.
