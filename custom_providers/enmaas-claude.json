@@ -1,0 +1,10 @@
+{
+  "name": "enmaas-claude",
+  "engine": "anthropic",
+  "display_name": "EnMaaS Claude",
+  "description": "Claude models via EnMaaS Anthropic Messages",
+  "api_key_env": "ENMAAS_KEY",
+  "base_url": "https://api.enmaas.devshift.net",
+  "models": [],
+  "requires_auth": true
+}

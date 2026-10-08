@@ -1,0 +1,15 @@
+{
+  "name": "enmaas",
+  "engine": "openai",
+  "display_name": "EnMaaS",
+  "description": "EnMaaS OpenAI-compatible Chat Completions",
+  "api_key_env": "ENMAAS_KEY",
+  "base_url": "https://api.enmaas.devshift.net/v1/chat/completions",
+  "models": [
+    {
+      "name": "rits/zai-org/glm-5-3",
+      "context_limit": 262144
+    }
+  ],
+  "requires_auth": true
+}
