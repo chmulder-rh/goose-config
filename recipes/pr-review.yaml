@@ -1,0 +1,128 @@
+version: "1.0.0"
+title: "PR Review"
+description: "Reviews a commit range or explicit commits in the current repo, enriched with Jira ticket and GitHub PR context"
+
+parameters:
+  - key: ticket
+    input_type: string
+    requirement: optional
+    default: ""
+    description: "Jira issue key (e.g. RHCLOUD-123). Empty skips Jira context."
+  - key: pr
+    input_type: string
+    requirement: optional
+    default: ""
+    description: "GitHub PR number. Empty skips PR description and comments."
+  - key: commits
+    input_type: string
+    requirement: optional
+    default: ""
+    description: "Space-separated commit SHAs to review individually. Takes precedence over range."
+  - key: range
+    input_type: string
+    requirement: optional
+    default: "origin/main...HEAD"
+    description: "Git revision range to review when no explicit commits are given."
+
+extensions:
+  - type: builtin
+    name: developer
+
+  - type: streamable_http
+    name: rovo
+    display_name: "Atlassian Rovo MCP Server"
+    description: "Jira issue context"
+    uri: https://mcp.atlassian.com/v2/mcp
+    timeout: 300
+    available_tools:
+      - getJiraIssue
+
+  # GitHub remote MCP — read-only pull_requests toolset via URL path.
+  # OAuth app registered; client id below. GITHUB_OAUTH_CLIENT_SECRET is
+  # injected per-invocation by the goose() shell wrapper (~/.bashrc.d/goose.sh,
+  # fetched from KeePassXC via secret-tool); used for token refresh.
+  - type: streamable_http
+    name: github
+    description: "Read-only GitHub PR context"
+    uri: https://api.githubcopilot.com/mcp/x/pull_requests/readonly
+    timeout: 60
+    available_tools:
+      - pull_request_read
+      - list_pull_requests
+      - search_pull_requests
+    client_id: "Ov23liYlQE2gLU5KNYQJ"
+    client_secret_key: GITHUB_OAUTH_CLIENT_SECRET
+    env_keys:
+      - GITHUB_OAUTH_CLIENT_SECRET
+    scopes:
+      - repo
+
+settings:
+  temperature: 0.1
+  max_turns: 100
+
+instructions: |
+  You are a senior engineer conducting a code review in the current repository.
+
+  Determine the revisions under review:
+  - Explicit commits: {{ commits }}
+  - Fallback range: {{ range }}
+  If commits are given, review each individually (git show per SHA, including
+  commit message quality). Otherwise review the aggregate diff of the range.
+
+  Context gathering, in order:
+  1. If commits are given, use them. Otherwise run git log and git diff for the range.
+  2. Jira ticket: {{ ticket }}. If non-empty, fetch it with
+     rovo__getJiraIssue(cloudId="2b9e35e3-6bd3-4cec-b838-f4249ee02432",
+     issueIdOrKey="{{ ticket }}", fields=["summary", "description", "status",
+     "comment"], responseContentFormat="markdown"). If empty, skip Jira context.
+  3. PR number: {{ pr }}. If non-empty, derive owner/repo from
+     `git remote get-url origin`, then use the github pull_request_read tool
+     (its command input supports get_pull_request, get_diff, get_files,
+     get_commits, get_reviews, get_review_comments) to fetch the PR
+     description, changed files, existing reviews, and review threads.
+     If empty, skip PR context.
+
+  Review priorities:
+  1. Alignment between the change and the ticket/PR intent. Flag unexplained
+     scope, missing acceptance criteria, or drift from the description.
+  2. Correctness: bugs, edge cases, error handling, concurrency, security.
+  3. Tests: gaps, weak assertions, untested paths.
+  4. Commit hygiene when reviewing individual commits.
+
+  Output format — a GitHub PR comment:
+  Your final response must be ONLY the markdown document, with no preamble
+  or closing remarks, ready to paste directly into a PR comment. Structure:
+
+    ## Code Review: <one-line summary>
+
+    **Verdict:** <approve | needs changes> — <one sentence why>
+    **Scope:** <commits or range actually reviewed>
+
+    ### 🔴 Critical
+    #### <short title> — `path/to/file.ext:123`
+    <what is wrong, why it matters, and the concrete fix. Use a fenced
+    diff block for suggested code changes.>
+
+    ### 🟠 Major
+    <same shape as Critical>
+
+    ### 🟡 Minor / nits
+    <same shape, terser — one or two sentences each>
+
+    ### ✅ Done well
+    <two to four bullets: solid choices worth keeping>
+
+  Rules: omit severity sections that have no findings; anchor every finding
+  to a file:line reference; order findings by severity, then impact; keep
+  the document scannable — findings first, no filler prose.
+
+  Constraints:
+  - This review is strictly read-only: do not modify files, do not post
+    comments or reviews to GitHub or Jira, do not push.
+  - If rovo or github is unavailable or authentication fails, proceed with the
+    remaining context and note the gap in your report.
+
+prompt: |
+  Conduct the code review now. Ticket: {{ ticket }}, PR: {{ pr }},
+  commits: {{ commits }}, range: {{ range }}.
