@@ -12,7 +12,7 @@
 ## Shell commands
 
 - Prefer writing temporary files to the current project's `./tmp` folder when it exists and is ignored by Git; otherwise use a system temporary directory.
-- Never run commands that execute tests, builds or installs, regardless of command name. Show them instead.
+- Never run commands that execute updates or installs, regardless of command name. Show them instead.
 
 ### Git
 
@@ -23,6 +23,9 @@
 
 ### General
 
+- Strictly adhere to the YAGNI (You Aren't Gonna Need It) principle.
+- Do not rewrite untouched code. Return only the modified snippet or function.
+- Do not add speculative abstractions, defensive type checks for impossible cases, or conversational text.
 - Prefer short, focused functions; split longer functions when doing so improves clarity.
 - Function and variable names should be self documenting.
 - Code should be easy for humans to read and understand. Keep it simple.
