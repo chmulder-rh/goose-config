@@ -28,6 +28,15 @@ smart_approve:
   - atlassianrovo__updateConfluencePage
   - execute_typescript
   - load
+  - rovo__addGraphContext
+  - rovo__addOrEditJiraIssueComment
+  - rovo__createConfluenceContent
+  - rovo__createJiraIssue
+  - rovo__editJiraIssue
+  - rovo__executeDestructive
+  - rovo__executeWrite
+  - rovo__transitionJiraIssue
+  - rovo__updateConfluenceContent
   - edit
   - extensionmanager__manage_extensions
   - read_image
