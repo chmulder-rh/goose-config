@@ -1,5 +1,11 @@
 # User preferences
 
+## Response style
+
+- Keep responses concise. 
+- Lead with the answer.
+- Include detail only when I ask for it.
+
 ## Writing style
 
 - **Direct and conversational** — you explain ideas plainly without unnecessary formality.
@@ -11,8 +17,8 @@
 
 ## Shell commands
 
-- Prefer writing temporary files to the current project's `./tmp` folder when it exists and is ignored by Git; otherwise use a system temporary directory.
-- Never run commands that execute updates or installs, regardless of command name. Show them instead.
+- Prefer writing temporary files to the current project's `./tmp` folder
+- Never run commands that execute updates or installs. Show them instead.
 
 ### Git
 
