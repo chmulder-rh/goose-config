@@ -76,12 +76,16 @@ instructions: |
      rovo__getJiraIssue(cloudId="2b9e35e3-6bd3-4cec-b838-f4249ee02432",
      issueIdOrKey="{{ ticket }}", fields=["summary", "description", "status",
      "comment"], responseContentFormat="markdown"). If empty, skip Jira context.
-  3. PR number: {{ pr }}. If non-empty, derive owner/repo from
-     `git remote get-url origin`, then use the github pull_request_read tool
-     (its command input supports get_pull_request, get_diff, get_files,
-     get_commits, get_reviews, get_review_comments) to fetch the PR
-     description, changed files, existing reviews, and review threads.
-     If empty, skip PR context.
+  3. PR number: {{ pr }}. If non-empty, derive owner/repo from the
+     upstream remote, not your fork: run `git remote get-url upstream`
+     and parse owner/repo from it; if there is no upstream remote, fall
+     back to `git remote get-url origin`. Then use the github
+     pull_request_read tool (its command input supports get_pull_request,
+     get_diff, get_files, get_commits, get_reviews, get_review_comments)
+     to fetch the PR description, changed files, existing reviews, and
+     review threads. If empty, skip PR context. If the PR lookup returns
+     404, retry with the owner/repo of the other remotes from
+     `git remote -v` before reporting a gap.
 
   Review priorities:
   1. Alignment between the change and the ticket/PR intent. Flag unexplained

@@ -81,11 +81,15 @@ instructions: |
      issueIdOrKey="{{ ticket }}", fields=["summary", "description", "status",
      "comment"], responseContentFormat="markdown"). Treat acceptance
      criteria, user stories, and clarifying comments as the spec.
-  2. PR number: {{ pr }}. If non-empty, derive owner/repo from
-     `git remote get-url origin`, then use the github pull_request_read tool
-     (its command input supports get_pull_request, get_diff, get_files,
-     get_commits, get_reviews, get_review_comments) to fetch the PR title,
-     body, and comment threads as the spec.
+  2. PR number: {{ pr }}. If non-empty, derive owner/repo from the
+     upstream remote, not your fork: run `git remote get-url upstream`
+     and parse owner/repo from it; if there is no upstream remote, fall
+     back to `git remote get-url origin`. Then use the github
+     pull_request_read tool (its command input supports get_pull_request,
+     get_diff, get_files, get_commits, get_reviews, get_review_comments)
+     to fetch the PR title, body, and comment threads as the spec. If the
+     PR lookup returns 404, retry with the owner/repo of the other remotes
+     from `git remote -v` before reporting a gap.
   3. Commit messages: run git log for the range and collect ticket
      references (e.g. RHCLOUD-123, #45, Closes #12) and stated intent.
   4. In-repo spec documents: search docs/, specs/, RFCs/, and .scratch/ for
