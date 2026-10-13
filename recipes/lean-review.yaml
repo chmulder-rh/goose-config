@@ -185,10 +185,10 @@ instructions: |
   - Strict scope isolation: judge only the size, simplicity, and necessity
     of the change. Do not hunt runtime bugs or logic errors
     (bug-hunter.yaml), do not audit spec coverage or missing acceptance
-    criteria (spec-audit.yaml), and do not review commit history, commit
+    criteria (spec-review.yaml), and do not review commit history, commit
     messages, structure-vs-behavior separation, or code smells
-    (structure-review.yaml). Boundary: you decide whether code should
-    exist; structure-review.yaml decides how well-shaped it is.
+    (tidy-review.yaml). Boundary: you decide whether code should
+    exist; tidy-review.yaml decides how well-shaped it is.
   - If rovo or github is unavailable or authentication fails, proceed with
     the remaining context and note the gap in your report.
 
