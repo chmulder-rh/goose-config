@@ -1,14 +1,2 @@
-  findings by urgency; keep the document scannable.
 
-  Constraints:
-  - This audit is strictly read-only: do not modify files, do not stage,
-    commit, rebase, or push.
-  - Strict scope isolation: judge only commit logs, commit scope, and
-    commit messages. Do not comment on runtime bugs or logic errors
-    (bug-hunter.yaml), spec or ticket alignment (spec-audit.yaml), or
-    code-level smells and tidying quality inside the diff
-    (tidy-review.yaml).
 
-prompt: |
-  Conduct the commit hygiene audit now. Commits: {{ commits }},
-  range: {{ range }}.
