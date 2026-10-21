@@ -23,7 +23,7 @@ GOOSE_THINKING_EFFORT: high
 GOOSE_CLI_SHOW_COST: true
 GOOSE_MODE: approve
 GOOSE_MAX_TOKENS: 30000
-active_provider: openai
+active_provider: enmaas
 slash_commands:
 - command: research
   recipe_path: /home/chmulder/.config/goose/recipes/rpi-research.yaml
@@ -51,6 +51,14 @@ providers:
   openai:
     enabled: true
     model: gpt-6-luna-high
+    configured: true
+  enmaas:
+    enabled: true
+    model: rits/zai-org/glm-5-3
+    configured: true
+  enmaas-claude:
+    enabled: true
+    model: claude-sonnet-5-5
     configured: true
 extensions:
   code_execution:
