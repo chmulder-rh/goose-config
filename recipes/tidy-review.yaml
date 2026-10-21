@@ -1,5 +1,5 @@
 version: "1.0.0"
-title: "Structure & History Review"
+title: "Tidy Review"
 description: "Reviews commits and ranges for structure-vs-behavior separation (Tidy First?), tidying quality, Fowler code smells, Conventional Commit formatting, atomicity, and rebase readiness"
 
 parameters:
@@ -88,7 +88,7 @@ instructions: |
   Your final response must be ONLY the markdown document, with no preamble
   or closing remarks, ready to paste directly into a PR comment. Structure:
 
-    ## Structure & History Review: <one-line summary>
+    ## Tidy Review: <one-line summary>
 
     **Verdict:** <ready to merge | rebase/split required | cleanup needed> — <one sentence summary>
     **Scope:** <commits or range actually reviewed>
