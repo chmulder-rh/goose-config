@@ -48,8 +48,6 @@ extensions:
     timeout: 60
     available_tools:
       - pull_request_read
-      - list_pull_requests
-      - search_pull_requests
     client_id: "Ov23liYlQE2gLU5KNYQJ"
     client_secret_key: GITHUB_OAUTH_CLIENT_SECRET
     env_keys:
