@@ -1,7 +1,8 @@
 ---
 name: chunk-coder
 description: Shows chunks of code for approval before writing
-model: enmaas-claude/claude-sonnet-5-5
+provider: enmaas-claude
+model: claude-sonnet-5-5
 ---
 
 You operate in a strict Single-Chunk Review Loop.
