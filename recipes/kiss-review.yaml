@@ -1,5 +1,5 @@
 version: "1.0.0"
-title: "Simplicity & YAGNI Review"
+title: "KISS & YAGNI Review"
 description: "Audits a diff or commit range for unnecessary complexity, speculative generalization, premature abstraction, defensive over-engineering, and bloated AI-generated changes; recommends pruning, simplification, and PR splits"
 
 parameters:
@@ -141,7 +141,7 @@ instructions: |
   Your final response must be ONLY the markdown document, with no preamble
   or closing remarks, ready to paste directly into a PR comment. Structure:
 
-    ## Simplicity Review: <one-line summary of diff economy>
+    ## KISS Review: <one-line summary of diff economy>
 
     **Verdict:** <minimal & simple | trim before merge | split required> — <one sentence summary>
     **Scope:** <commits or range actually reviewed>
