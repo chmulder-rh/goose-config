@@ -137,8 +137,10 @@ instructions: |
   - The summary table copies each report's own verdict and names its most
     severe finding; it adds no judgment of your own.
   - The Overall Verdict is "needs attention" if any report contains a 🔴
-    or 🟠 finding, or if the KISS review recommends pruning or splitting;
-    otherwise "ready to merge".
+    or 🟠 finding, if the KISS review recommends pruning or splitting,
+    or if any reviewer failed outright (error, timeout) or aborted for
+    an unexpected reason (e.g. spec source fetch failure); otherwise
+    "ready to merge".
   - Read-only: do not post to GitHub or Jira, do not modify files, do
     not run any reviewer's job yourself.
 

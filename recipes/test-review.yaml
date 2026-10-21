@@ -7,12 +7,12 @@ parameters:
     input_type: string
     requirement: optional
     default: ""
-    description: "Space-separated commit SHAs to inspect individually. Takes precedence over range."
+    description: "Space-separated commit SHAs to review individually. Takes precedence over range."
   - key: range
     input_type: string
     requirement: optional
     default: "origin/main...HEAD"
-    description: "Git revision range to inspect when no explicit commits are given."
+    description: "Git revision range to review when no explicit commits are given."
 
 extensions:
   - type: builtin
