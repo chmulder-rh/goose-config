@@ -184,7 +184,7 @@ instructions: |
     comments or reviews to GitHub or Jira, do not push.
   - Strict scope isolation: judge only the size, simplicity, and necessity
     of the change. Do not hunt runtime bugs or logic errors
-    (bug-hunter.yaml), do not audit spec coverage or missing acceptance
+    (bug-review.yaml), do not audit spec coverage or missing acceptance
     criteria (spec-review.yaml), and do not review commit history, commit
     messages, structure-vs-behavior separation, or code smells
     (tidy-review.yaml). Boundary: you decide whether code should

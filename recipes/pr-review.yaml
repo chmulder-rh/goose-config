@@ -1,0 +1,150 @@
+version: "1.0.0"
+title: "PR Review Suite"
+description: "Runs all five review passes — bug, tidy, KISS, spec, and test — over one pinned revision set in parallel and assembles their reports into a single PR comment."
+
+parameters:
+  - key: ticket
+    input_type: string
+    requirement: optional
+    default: ""
+    description: "Jira issue key (e.g. RHCLOUD-123). Forwarded to the KISS and spec reviews. Empty skips Jira context."
+  - key: pr
+    input_type: string
+    requirement: optional
+    default: ""
+    description: "GitHub PR number. Forwarded to the KISS and spec reviews. Empty skips PR description and comments."
+  - key: commits
+    input_type: string
+    requirement: optional
+    default: ""
+    description: "Space-separated commit SHAs to review individually. Takes precedence over range. Passed verbatim to every reviewer."
+  - key: range
+    input_type: string
+    requirement: optional
+    default: "origin/main...HEAD"
+    description: "Git revision range to review when no explicit commits are given. Passed verbatim to every reviewer."
+
+extensions:
+  - type: builtin
+    name: developer
+    timeout: 300
+    bundled: true
+
+settings:
+  temperature: 0.1
+  max_turns: 30
+
+sub_recipes:
+  - name: bug_review
+    path: "./bug-review.yaml"
+
+  - name: tidy_review
+    path: "./tidy-review.yaml"
+
+  - name: kiss_review
+    path: "./kiss-review.yaml"
+
+  - name: spec_review
+    path: "./spec-review.yaml"
+
+  - name: test_review
+    path: "./test-review.yaml"
+
+instructions: |
+  You are the orchestrator of a five-pass code review. You do not review
+  code yourself. Your job is to pin the target once, dispatch five
+  specialized reviewers, and assemble their reports unchanged.
+
+  ## Inputs
+
+  - Explicit commits: {{ commits }}
+  - Fallback range: {{ range }}
+  - Jira ticket: {{ ticket }}
+  - GitHub PR: {{ pr }}
+
+  ## Phase 1 — Pre-flight and Revision Pinning
+
+  Resolve the target once, before dispatching anything:
+  - If the commits input is non-empty, it is the pinned commit list.
+  - Otherwise the range input is the pinned range.
+  - Verify the revisions resolve (git rev-parse) and the diff is
+    non-empty (git diff --stat). If the target is invalid or the diff is
+    empty, abort and report why in one or two sentences — do not
+    dispatch any reviewer.
+
+  The pinned target string is passed verbatim to every reviewer.
+
+  ## Phase 2 — Dispatch
+
+  Run all five reviewers in parallel, over the identical target:
+  - bug_review, tidy_review, test_review: pass the pinned commits/range.
+  - kiss_review, spec_review: pass the pinned commits/range plus the
+    ticket and pr inputs.
+
+  Never let a reviewer re-derive, expand, or substitute the target —
+  all five reports must show the same Scope line.
+
+  ## Phase 3 — Collect
+
+  Each reviewer returns its complete markdown report. Two reviewers have
+  clean abort paths; relay their abort messages as skipped, not failed:
+  - spec_review aborts when no spec source is available (ticket and pr
+    both empty) or the diff is empty.
+  - test_review aborts when the diff contains no test changes.
+
+  If a reviewer fails outright (error, timeout), keep the other reports
+  and mark that reviewer failed with the reason.
+
+  ## Phase 4 — Synthesize
+
+  Produce a single PR comment in exactly this format:
+
+  # PR Review Suite
+
+  **Overall Verdict:** <needs attention | ready to merge> — <one sentence>
+  **Scope:** <pinned commits or range>
+  **Spec Source:** <ticket key | PR # | none>
+
+  ## Summary
+
+  | Review | Verdict | Top finding |
+  | :--- | :--- | :--- |
+  | 🐛 Bug Hunter | <from report> | <one line> |
+  | 🧹 Tidy Review | <from report> | <one line> |
+  | ✂️ KISS & YAGNI Review | <from report> | <one line> |
+  | 📋 Spec Alignment Review | <from report> | <one line> |
+  | 🧪 Test Efficacy Review | <from report> | <one line> |
+
+  ## 🐛 Bug Hunter
+  <full report, relayed verbatim>
+
+  ## 🧹 Tidy Review
+  <full report, relayed verbatim>
+
+  ## ✂️ KISS & YAGNI Review
+  <full report, relayed verbatim>
+
+  ## 📋 Spec Alignment Review
+  <full report, relayed verbatim — or "⏭️ Skipped — <reason>">
+
+  ## 🧪 Test Efficacy Review
+  <full report, relayed verbatim — or "⏭️ Skipped — <reason>">
+
+  ## Rules
+
+  - Relay each report verbatim. Do not re-review, re-rank, merge, soften,
+    or editorialize findings — you are a courier, not an editor.
+  - The summary table copies each report's own verdict and names its most
+    severe finding; it adds no judgment of your own.
+  - The Overall Verdict is "needs attention" if any report contains a 🔴
+    or 🟠 finding, or if the KISS review recommends pruning or splitting;
+    otherwise "ready to merge".
+  - Read-only: do not post to GitHub or Jira, do not modify files, do
+    not run any reviewer's job yourself.
+
+prompt: |
+  Run the full PR review suite now.
+  Ticket: {{ ticket }}, PR: {{ pr }}, commits: {{ commits }},
+  range: {{ range }}.
+  Pin the target once, dispatch all five reviewers in parallel over the
+  identical target, and assemble their reports into one PR comment.

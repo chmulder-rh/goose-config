@@ -3,3 +3,6 @@ tls/*
 tmp
 .aider*
 .cecli*
+thoughts
+secrets.yaml
+secrets.yaml.lock

@@ -93,8 +93,9 @@ instructions: |
   - This hunt is strictly read-only: do not modify files, do not stage,
     commit, or push.
   - Strict scope isolation: do not comment on formatting, naming, commit
-    message quality, structure-vs-behavior separation, or spec and ticket
-    alignment — those belong to other review passes.
+    message quality, or structure-vs-behavior separation (tidy-review.yaml);
+    the size, necessity, or minimality of the change (kiss-review.yaml); or
+    spec and ticket alignment (spec-review.yaml).
 
 prompt: |
   Conduct the bug hunt now. Commits: {{ commits }}, range: {{ range }}.

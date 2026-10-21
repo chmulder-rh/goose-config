@@ -64,7 +64,7 @@ instructions: |
      clumps, and comments that compensate for unclear code. Report only
      smells introduced or touched by the change, and only in code the
      requirement needs — whether code should exist at all is
-     lean-review.yaml's question, not yours.
+     kiss-review.yaml's question, not yours.
   4. Commit message quality and Conventional Commits:
      - Subjects: capitalized, imperative mood ("Add feature", not "Added"
        or "Adds"), roughly 50-72 characters, no trailing period, correct
@@ -137,9 +137,9 @@ instructions: |
   - This review is strictly read-only: do not modify files, do not stage,
     commit, rebase, or push.
   - Strict scope isolation: do not hunt runtime bugs or logic errors
-    (bug-hunter.yaml), do not audit spec or ticket alignment
+    (bug-review.yaml), do not audit spec or ticket alignment
     (spec-review.yaml), and do not judge the size, necessity, or minimality
-    of the change (lean-review.yaml). Boundary with lean-review: it
+    of the change (kiss-review.yaml). Boundary with kiss-review: it
     decides whether code should exist; you judge how well-shaped the code
     that stays is.
 
