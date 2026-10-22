@@ -38,6 +38,9 @@
 - Use functional programming or composition techniques so code is easy to test. 
 - Write tests before implementation where practical, but don't run them; show the user the commands to run.
 - Don't overcomplicate the tests. Start with happy day and obvious edge cases. 
+- Apply the 80/20 (Pareto) principle to tests: write the ~20% of tests that cover the ~80% of behavior that matters — core happy paths plus the highest-risk edge cases (data loss, security, money).
+- Prioritize tests by risk (failure probability × impact), not by coverage percentage. Skip tests for trivial code, mirrors of the implementation, and improbable input combinations.
+- Don't write speculative tests for hypothetical edge cases that haven't materialized. When an edge case actually surfaces as a bug, add a regression test for it.
 - Prefer tests that don't write to the filesystem. When testing filesystem behavior, use an isolated temporary directory and clean up afterward.
 
 ## TypeScript 
