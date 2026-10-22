@@ -42,13 +42,9 @@ extensions:
     available_tools:
       - getJiraIssue
 
-  # GitHub remote MCP — read-only pull_requests toolset via URL path.
-  # 'repo' is the minimum classic OAuth scope that can read private PRs —
-  # classic OAuth has no read-only private-repo scope; read-only is
-  # enforced by the readonly URL path and available_tools.
-  # OAuth app registered; client id below. GITHUB_OAUTH_CLIENT_SECRET is
-  # injected per-invocation by the goose() shell wrapper (~/.bashrc.d/goose.sh,
-  # fetched from KeePassXC via secret-tool); used for token refresh.
+  # Read-only GitHub PR context via remote MCP (readonly URL path plus
+  # available_tools). The OAuth app secret GITHUB_OAUTH_CLIENT_SECRET is
+  # injected per-invocation by the goose() shell wrapper (~/.bashrc.d/goose.sh).
   - type: streamable_http
     name: github
     description: "Read-only GitHub PR context"
@@ -74,15 +70,16 @@ instructions: |
   nothing different, nothing unasked-for?
 
   Phase 1 — Pre-flight, revision pinning, and spec source:
-  - Explicit commits: {{ commits }}
+  - Explicit commits (empty means none): {{ commits }}
   - Fallback range: {{ range }}
   - Jira ticket: {{ ticket }}
   - GitHub PR: {{ pr }}
   Validate the target before anything else: confirm the revisions resolve
-  (git rev-parse) and that the diff is non-empty (git diff). If the range is
-  invalid or the diff is empty, abort and report why in one or two sentences.
+  (git rev-parse) and that the diff is non-empty (git diff --stat <range>,
+  or git show --stat per SHA). If the target is invalid or the diff is
+  empty, abort: your entire response is the reason, in one or two sentences.
   A spec source is mandatory: if both {{ ticket }} and {{ pr }} are empty,
-  abort in one or two sentences — acceptance criteria cannot be traced
+  abort the same way — acceptance criteria cannot be traced
   without a stated requirement. If commits are given, review each SHA
   individually (git show per SHA). Otherwise review the aggregate diff of
   the range.
@@ -97,13 +94,9 @@ instructions: |
      upstream remote, not your fork: run `git remote get-url upstream`
      and parse owner/repo from it; if there is no upstream remote, fall
      back to `git remote get-url origin`. Then use the github
-     pull_request_read tool (its command input supports get_pull_request,
-     get_diff, get_files, get_commits, get_reviews, get_review_comments)
-     to fetch the PR title, body, and comment threads. If both ticket and
-     PR are provided, the Jira ticket is authoritative and the PR body is
-     supplementary context. If the PR lookup returns 404, retry with the
-     owner/repo of the other remotes from `git remote -v` before
-     reporting a gap.
+     pull_request_read tool to fetch the PR title, body, and comment
+     threads. If both ticket and PR are provided, the Jira ticket is
+     authoritative and the PR body is supplementary context.
   3. Extract the requirement list: enumerate every acceptance criterion,
      user story, or testable requirement statement from the spec source.
      If the spec has no structured criteria, decompose its description
@@ -135,22 +128,15 @@ instructions: |
      - User-visible behavior changes with no criterion backing: changed
        defaults, removed or renamed outputs, new unrequested behaviors,
        API contract changes.
-     - Boundary: whether extra code is bloated or over-abstracted is
-       kiss-review.yaml's question; yours is extra behavior the
-       requirement never asked for.
   5. Verification — every criterion tested:
      - Each criterion must be exercised by a test in the diff, or by an
        existing test that demonstrably covers it.
-     - Boundary: excessive or bloated tests are kiss-review.yaml's
-       question; whether a test can actually fail is test-review.yaml's
-       question; missing tests for stated criteria are yours.
   Only report findings you can justify by quoting the criterion and
-  pointing at the code, or its absence. Prefer fewer, concrete,
-  high-confidence findings over speculative ones, and state your
-  confidence (high | medium | low) for each finding.
+  pointing at the code, or its absence; prefer fewer, high-confidence
+  findings.
 
   Phase 4 — Output format — a GitHub PR comment:
-  Your final response must be ONLY the markdown document, with no preamble
+  Your final response must be only the markdown document, with no preamble
   or closing remarks, ready to paste directly into a PR comment. Structure:
 
     ## Spec Review: <one-line summary of requirement alignment>
@@ -179,6 +165,7 @@ instructions: |
 
     ### 🟠 Partial Implementations
     #### <criterion short title> — `path/to/file.ext:123`
+    * **Confidence:** <high | medium | low>
     * **Specified:** <the full criterion>
     * **Delivered:** <the part that exists>
     * **Missing:** <the part that does not>
@@ -204,9 +191,9 @@ instructions: |
 
   Rules: omit sections that have no findings, except the Traceability
   Matrix, which is mandatory; anchor every finding to a file:line
-  reference; quote or paraphrase the criterion in every finding; order
-  findings by severity, then confidence; keep the document scannable —
-  findings first, no filler prose.
+  reference; quote or paraphrase the criterion in every finding; within
+  each section, list higher-confidence findings first; keep the document
+  scannable — no filler prose.
 
   Constraints:
   - This review is strictly read-only: do not modify files, do not post
@@ -215,16 +202,12 @@ instructions: |
     (bug-review.yaml), do not judge the size, simplicity, or necessity of
     the implementation (kiss-review.yaml), and do not review commit
     history, commit messages, structure-vs-behavior separation, or code
-    smells (tidy-review.yaml). Boundary: bug-review.yaml decides whether
-    the code works; kiss-review.yaml decides whether the implementation
-    is minimal; tidy-review.yaml decides how well-shaped it is; you
-    decide only whether the delivered behavior matches the required
-    behavior.
+    smells (tidy-review.yaml). You decide only whether the delivered
+    behavior matches the required behavior.
   - If one spec source fails to fetch — unavailable extension, failed
     authentication, or 404 — proceed with the source that worked and
     note the gap in your report. If no spec source can be retrieved at
-    all, abort and report why in one or two sentences.
+    all, abort the same way.
 
 prompt: |
-  Conduct the spec alignment review now. Ticket: {{ ticket }}, PR: {{ pr }},
-  commits: {{ commits }}, range: {{ range }}.
+  Conduct the spec alignment review now.
