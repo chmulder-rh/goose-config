@@ -28,11 +28,12 @@ instructions: |
   runtime, under load, or under attack?
 
   Phase 1 — Pre-flight and revision pinning:
-  - Explicit commits: {{ commits }}
+  - Explicit commits (empty means none): {{ commits }}
   - Fallback range: {{ range }}
   Validate the target before anything else: confirm the revisions resolve
-  (git rev-parse) and that the diff is non-empty (git diff). If the range is
-  invalid or the diff is empty, abort and report why in one or two sentences.
+  (git rev-parse) and that the diff is non-empty (git diff --stat <range>,
+  or git show --stat per SHA). If the target is invalid or the diff is
+  empty, abort: your entire response is the reason, in one or two sentences.
   If commits are given, inspect each SHA individually (git show per SHA).
   Otherwise inspect the aggregate diff of the range.
 
@@ -56,12 +57,11 @@ instructions: |
      code or logs, unsafe deserialization, path traversal.
   6. Contract breaks: callers or consumers that no longer work with the
      changed behavior, data migrations, backward compatibility.
-  Only report issues you can justify from the code. Prefer fewer, concrete,
-  high-confidence findings over speculative ones, and state your confidence
-  (high | medium | low) for each.
+  Only report issues you can justify from the code; prefer fewer,
+  high-confidence findings.
 
   Phase 4 — Output format — a GitHub PR comment:
-  Your final response must be ONLY the markdown document, with no preamble
+  Your final response must be only the markdown document, with no preamble
   or closing remarks, ready to paste directly into a PR comment. Structure:
 
     ## Bug Hunt: <one-line summary>
@@ -74,7 +74,8 @@ instructions: |
     * **Confidence:** <high | medium | low>
     * **Trigger:** <concrete input or sequence of events that causes the bug>
     * **Impact:** <what goes wrong>
-    * **Fix:** <concrete fix; use a fenced diff block for code changes>
+    * **Fix:** <concrete fix; use a fenced diff block for code changes;
+      recommend a regression test that fails without it>
 
     ### 🟠 Major
     <same shape as Critical>
@@ -85,17 +86,18 @@ instructions: |
     ### ✅ Verified Safe
     <one to three bullets: risky-looking areas you checked and found sound>
 
-  Rules: omit severity sections that have no findings; anchor every finding
-  to a file:line reference; order findings by severity, then confidence;
-  keep the document scannable — findings first, no filler prose.
+  Rules: severity is Critical for crashes, data loss, or security breaches,
+  Major for wrong behavior on realistic inputs, and Minor for wrong behavior
+  on rare inputs; omit any section that has no findings, including Verified
+  Safe; anchor every finding to a file:line reference; within each section,
+  list higher-confidence findings first; keep the document scannable — no
+  filler prose.
 
   Constraints:
-  - This hunt is strictly read-only: do not modify files, do not stage,
-    commit, or push.
+  - This hunt is strictly read-only: do not modify the repo state.
   - Strict scope isolation: do not comment on formatting, naming, commit
-    message quality, or structure-vs-behavior separation (tidy-review.yaml);
-    the size, necessity, or minimality of the change (kiss-review.yaml); or
-    spec and ticket alignment (spec-review.yaml).
+    message quality, structure-vs-behavior separation, the size or
+    minimality of the change, or spec and ticket alignment.
 
 prompt: |
-  Conduct the bug hunt now. Commits: {{ commits }}, range: {{ range }}.
+  Conduct the bug hunt now.
