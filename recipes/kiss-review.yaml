@@ -42,13 +42,9 @@ extensions:
     available_tools:
       - getJiraIssue
 
-  # GitHub remote MCP — read-only pull_requests toolset via URL path.
-  # 'repo' is the minimum classic OAuth scope that can read private PRs —
-  # classic OAuth has no read-only private-repo scope; read-only is
-  # enforced by the readonly URL path and available_tools.
-  # OAuth app registered; client id below. GITHUB_OAUTH_CLIENT_SECRET is
-  # injected per-invocation by the goose() shell wrapper (~/.bashrc.d/goose.sh,
-  # fetched from KeePassXC via secret-tool); used for token refresh.
+  # Read-only GitHub PR context via remote MCP (readonly URL path plus
+  # available_tools). The OAuth app secret GITHUB_OAUTH_CLIENT_SECRET is
+  # injected per-invocation by the goose() shell wrapper (~/.bashrc.d/goose.sh).
   - type: streamable_http
     name: github
     description: "Read-only GitHub PR context"
@@ -75,11 +71,12 @@ instructions: |
   bloat?
 
   Phase 1 — Pre-flight and revision pinning:
-  - Explicit commits: {{ commits }}
+  - Explicit commits (empty means none): {{ commits }}
   - Fallback range: {{ range }}
   Validate the target before anything else: confirm the revisions resolve
-  (git rev-parse) and that the diff is non-empty (git diff). If the range is
-  invalid or the diff is empty, abort and report why in one or two sentences.
+  (git rev-parse) and that the diff is non-empty (git diff --stat <range>,
+  or git show --stat per SHA). If the target is invalid or the diff is
+  empty, abort: your entire response is the reason, in one or two sentences.
   If commits are given, review each SHA individually (git show per SHA).
   Otherwise review the aggregate diff of the range.
 
@@ -93,11 +90,8 @@ instructions: |
      upstream remote, not your fork: run `git remote get-url upstream`
      and parse owner/repo from it; if there is no upstream remote, fall
      back to `git remote get-url origin`. Then use the github
-     pull_request_read tool (its command input supports get_pull_request,
-     get_diff, get_files, get_commits, get_reviews, get_review_comments)
-     to fetch the PR title, body, and comment threads as the intended
-     scope. If the PR lookup returns 404, retry with the owner/repo of
-     the other remotes from `git remote -v` before reporting a gap.
+     pull_request_read tool to fetch the PR title, body, and comment
+     threads as the intended scope.
   3. Commit messages: run git log for the range and collect stated intent.
   If no ticket or PR description is found, judge minimality against the
   commit messages only and say so in the report.
@@ -130,6 +124,10 @@ instructions: |
      - Test bloat: tests that re-test the framework or language, exhaustive
        edge-case tests for hypothetical inputs, or test scaffolding heavier
        than the code under test.
+       Exception: do not flag scaffolding weight or edge-case coverage on
+       high-consequence paths (data loss, security, money) — that is the
+       risk-prioritized 20%, not bloat. Hypothetical inputs with no
+       plausible failure scenario remain findings even there.
   5. Defensive over-engineering (AI-specific bloat):
      - Redundant defensive programming: unnecessary null checks, duplicate
        schema assertions, and try-catch blocks around pure functions when
@@ -144,7 +142,7 @@ instructions: |
   concrete, high-confidence findings over speculative ones.
 
   Phase 4 — Output format — a GitHub PR comment:
-  Your final response must be ONLY the markdown document, with no preamble
+  Your final response must be only the markdown document, with no preamble
   or closing remarks, ready to paste directly into a PR comment. Structure:
 
     ## KISS Review: <one-line summary of diff economy>
@@ -152,13 +150,13 @@ instructions: |
     **Verdict:** <minimal & simple | trim before merge | split required> — <one sentence summary>
     **Scope:** <commits or range actually reviewed>
     **Spec Source:** <Jira ticket / GitHub PR # / Commit messages>
-    **Diff Economy:** <N files, +A/−D lines> — MVP Focus Score: <High | Medium | Low>
+    **Diff Economy:** <N files, +A/−D lines>
 
-    ### ✂️ Pruning Recommendations (Delete Entirely)
+    ### ✂️ Pruning Recommendations
     #### <Short Title> — `path/to/file.ext:123`
     * **Category:** [YAGNI] | [AI Bloat] | [Scope Creep]
     * **Why it can go:** <which requirement, if any, it maps to; why none needs it>
-    * **Action:** delete | inline | extract to a follow-up ticket
+    * **Action:** delete | extract to a follow-up ticket
 
     ### 🔧 Inline Simplifications
     #### <Short Title> — `path/to/file.ext:123`
@@ -181,23 +179,21 @@ instructions: |
     and simple as the requirement demands>
 
   Rules: omit sections that have no findings; anchor every finding to a
-  file:line reference; tag every finding with exactly one category token;
-  every finding must include a concrete simpler alternative or deletion;
-  order findings by impact on reviewer load; keep the document scannable.
+  file:line reference; tag every finding with exactly one category token —
+  when a finding fits multiple categories, use the first listed; every
+  finding must include a concrete simpler alternative or deletion; keep the
+  document scannable.
 
   Constraints:
   - This review is strictly read-only: do not modify files, do not post
     comments or reviews to GitHub or Jira, do not push.
-  - Strict scope isolation: judge only the size, simplicity, and necessity
-    of the change. Do not hunt runtime bugs or logic errors
+  - Strict scope isolation: you judge whether code should exist and how
+    small it can be. Do not hunt runtime bugs or logic errors
     (bug-review.yaml), do not audit spec coverage or missing acceptance
-    criteria (spec-review.yaml), and do not review commit history, commit
-    messages, structure-vs-behavior separation, or code smells
-    (tidy-review.yaml). Boundary: you decide whether code should
-    exist; tidy-review.yaml decides how well-shaped it is.
+    criteria (spec-review.yaml), and do not audit commit-message formatting
+    or history structure (tidy-review.yaml).
   - If rovo or github is unavailable or authentication fails, proceed with
     the remaining context and note the gap in your report.
 
 prompt: |
-  Conduct the simplicity review now. Ticket: {{ ticket }}, PR: {{ pr }},
-  commits: {{ commits }}, range: {{ range }}.
+  Conduct the simplicity review now.
