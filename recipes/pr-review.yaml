@@ -17,12 +17,12 @@ parameters:
     input_type: string
     requirement: optional
     default: ""
-    description: "Space-separated commit SHAs to review individually. Takes precedence over range. Passed verbatim to every reviewer."
+    description: "Space-separated commit SHAs to review individually. Takes precedence over range."
   - key: range
     input_type: string
     requirement: optional
     default: "origin/main...HEAD"
-    description: "Git revision range to review when no explicit commits are given. Passed verbatim to every reviewer."
+    description: "Git revision range to review when no explicit commits are given."
 
 extensions:
   - type: builtin
@@ -57,7 +57,7 @@ instructions: |
 
   ## Inputs
 
-  - Explicit commits: {{ commits }}
+  - Explicit commits (empty means none): {{ commits }}
   - Fallback range: {{ range }}
   - Jira ticket: {{ ticket }}
   - GitHub PR: {{ pr }}
@@ -67,43 +67,37 @@ instructions: |
   Resolve the target once, before dispatching anything:
   - If the commits input is non-empty, it is the pinned commit list.
   - Otherwise the range input is the pinned range.
-  - Verify the revisions resolve (git rev-parse) and the diff is
-    non-empty (git diff --stat). If the target is invalid or the diff is
-    empty, abort and report why in one or two sentences — do not
-    dispatch any reviewer.
-
-  The pinned target string is passed verbatim to every reviewer.
+  - Verify the revisions resolve and the diff is non-empty: git rev-parse
+    plus git diff --stat <range> for a range, or git show --stat <sha>
+    per commit for explicit SHAs. If the target is invalid or the diff is
+    empty, abort: your entire response is the reason, in one or two
+    sentences — do not dispatch any reviewer.
 
   ## Phase 2 — Dispatch
 
-  Run all five reviewers in parallel, over the identical target:
-  - bug_review, tidy_review, test_review: pass the pinned commits/range.
-  - kiss_review, spec_review: pass the pinned commits/range plus the
-    ticket and pr inputs.
+  Dispatch all five reviewers in parallel with the delegate tool, over
+  the identical target, including the pinned target in each dispatch:
+  - bug_review, tidy_review, test_review: pinned commits/range.
+  - kiss_review, spec_review: pinned commits/range plus ticket and pr.
 
-  Never let a reviewer re-derive, expand, or substitute the target —
-  all five reports must show the same Scope line.
+  If a report's Scope line differs from the pinned target, mark that
+  reviewer failed.
 
   ## Phase 3 — Collect
 
-  Each reviewer returns its complete markdown report. Two reviewers have
-  clean abort paths; relay their abort messages as skipped, not failed:
-  - spec_review aborts when no spec source is available (ticket and pr
-    both empty) or the diff is empty.
-  - test_review aborts when the diff contains no test changes.
-
-  If a reviewer fails outright (error, timeout), keep the other reports
-  and mark that reviewer failed with the reason.
+  Each reviewer returns its complete markdown report. A reviewer's own
+  abort message counts as skipped; any other failure (error, timeout)
+  counts as failed, with the reason. Keep the other reports either way.
 
   ## Phase 4 — Synthesize
 
-  Produce a single PR comment in exactly this format:
+  Produce the comment text as your final output, in exactly this format — do not post it:
 
   # PR Review Suite
 
   **Overall Verdict:** <needs attention | ready to merge> — <one sentence>
   **Scope:** <pinned commits or range>
-  **Spec Source:** <ticket key | PR # | none>
+  **Spec Source:** <ticket key, PR #, both, or none>
 
   ## Summary
 
@@ -116,37 +110,35 @@ instructions: |
   | 🧪 Test Efficacy Review | <from report> | <one line> |
 
   ## 🐛 Bug Hunter
-  <full report, relayed verbatim>
+  <full report>
 
   ## 🧹 Tidy Review
-  <full report, relayed verbatim>
+  <full report>
 
   ## ✂️ KISS & YAGNI Review
-  <full report, relayed verbatim>
+  <full report>
 
   ## 📋 Spec Alignment Review
-  <full report, relayed verbatim — or "⏭️ Skipped — <reason>">
+  <full report — or "⏭️ Skipped — <reason>">
 
   ## 🧪 Test Efficacy Review
-  <full report, relayed verbatim — or "⏭️ Skipped — <reason>">
+  <full report — or "⏭️ Skipped — <reason>">
 
   ## Rules
 
   - Relay each report verbatim. Do not re-review, re-rank, merge, soften,
     or editorialize findings — you are a courier, not an editor.
-  - The summary table copies each report's own verdict and names its most
-    severe finding; it adds no judgment of your own.
+  - The summary table copies each report's own verdict and its top
+    finding: the first 🔴 finding in the report, else the first 🟠, else
+    the report's first finding. For a skipped reviewer, Verdict is
+    "⏭️ Skipped" and Top finding is the abort reason; for a failed one,
+    "❌ Failed" and the failure reason.
   - The Overall Verdict is "needs attention" if any report contains a 🔴
     or 🟠 finding, if the KISS review recommends pruning or splitting,
-    or if any reviewer failed outright (error, timeout) or aborted for
-    an unexpected reason (e.g. spec source fetch failure); otherwise
-    "ready to merge".
-  - Read-only: do not post to GitHub or Jira, do not modify files, do
-    not run any reviewer's job yourself.
+    or if any reviewer failed; otherwise "ready to merge".
+  - Read-only: do not post to GitHub or Jira, do not modify files.
 
 prompt: |
-  Run the full PR review suite now.
-  Ticket: {{ ticket }}, PR: {{ pr }}, commits: {{ commits }},
-  range: {{ range }}.
-  Pin the target once, dispatch all five reviewers in parallel over the
-  identical target, and assemble their reports into one PR comment.
+  Run the full PR review suite now — dispatch all five reviewers in
+  parallel over the pinned target and assemble their reports into one
+  PR comment.
