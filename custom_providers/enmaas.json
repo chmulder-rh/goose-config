@@ -9,6 +9,9 @@
     {
       "name": "rits/zai-org/glm-5-3",
       "context_limit": 262144
+    },
+    {
+      "name": "rits/deepseek-ai/DeepSeek-V4.1-Flash-1017"
     }
   ],
   "requires_auth": true
