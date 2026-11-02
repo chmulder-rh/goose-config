@@ -8,11 +8,18 @@
   "models": [
     {
       "name": "rits/zai-org/glm-5-3",
-      "context_limit": 262144
+      "context_limit": 1048576,
+      "input_token_cost": 0,
+      "output_token_cost": 0
     },
     {
-      "name": "rits/deepseek-ai/DeepSeek-V4.1-Flash-1017"
+      "name": "rits/deepseek-ai/DeepSeek-V4.1-Flash-1017",
+      "context_limit": 1048576,
+      "input_token_cost": 0,
+      "output_token_cost": 0
     }
   ],
-  "requires_auth": true
+  "requires_auth": true,
+  "supports_streaming": true,
+  "preserves_thinking": true
 }
