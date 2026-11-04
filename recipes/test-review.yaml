@@ -54,12 +54,18 @@ instructions: |
      workflows). Verify each changed test file matches the discovery
      globs and is included in the suite or CI command — a test the runner
      never picks up is a finding.
-  3. Run the suite where feasible: prefer the project's standard test
-     command from CI or the package manifest, scoped to the changed test
-     files when the full suite is slow. Record the command, exit code,
-     and pass/fail/skip counts, and confirm the changed tests appear in
-     the output. If running is unsafe, destructive, too slow, or needs
-     unavailable credentials, skip the run and note the gap in the report.
+  3. Run the suite only on the reviewed revision. The reviewed tip is
+     the right side of the range, or the last listed SHA in commits
+     mode. Run only if git rev-parse HEAD equals git rev-parse of the
+     reviewed tip and git status --porcelain is empty; otherwise skip
+     with "not run: checkout ≠ reviewed revision" or "not run: dirty
+     working tree" as appropriate. When you run, prefer the project's
+     standard test command from CI or the package manifest, scoped to
+     the changed test files when the full suite is slow. Record the
+     command, the HEAD short SHA, exit code, and pass/fail/skip
+     counts, and confirm the changed tests appear in the output. If
+     running is unsafe, destructive, too slow, or needs unavailable
+     credentials, skip the run and note the gap in the report.
 
   Phase 3 — Review criteria. Evaluate every changed test against exactly
   five tenets and nothing else:
@@ -117,7 +123,7 @@ instructions: |
 
     **Verdict:** <tests constrain behavior | weak spots found | false confidence> — <one sentence why>
     **Scope:** <commits or range actually reviewed>
-    **Suite Run:** <command, exit code, pass/fail/skip counts — or "not run: <reason>">
+    **Suite Run:** <command at <short SHA>, exit code, pass/fail/skip counts — or "not run: <reason>">
 
     ### 🔴 False Confidence (Test Cannot Fail)
     #### <short title> — `path/to/test.ext:123`
