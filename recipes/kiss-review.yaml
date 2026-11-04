@@ -73,6 +73,11 @@ instructions: |
   Phase 1 — Pre-flight and revision pinning:
   - Explicit commits (empty means none): {{ commits }}
   - Fallback range: {{ range }}
+  If no commits are given and the range is three-dot (A...B), resolve
+  it to <git merge-base A B>..<git rev-parse B> and use that two-dot
+  range for every git command below and as the Scope. Three-dot git log
+  also lists commits that exist only on A; the resolved range lists
+  only the commits under review.
   Validate the target before anything else: confirm the revisions resolve
   (git rev-parse) and that the diff is non-empty (git diff --stat <range>,
   or git show --stat per SHA). If the target is invalid or the diff is
@@ -92,7 +97,8 @@ instructions: |
      back to `git remote get-url origin`. Then use the github
      pull_request_read tool to fetch the PR title, body, and comment
      threads as the intended scope.
-  3. Commit messages: run git log for the range and collect stated intent.
+  3. Commit messages: run git log over the resolved range from Phase 1
+     and collect stated intent.
   If no ticket or PR description is found, judge minimality against the
   commit messages only and say so in the report.
 

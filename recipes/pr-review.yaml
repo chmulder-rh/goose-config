@@ -66,7 +66,11 @@ instructions: |
 
   Resolve the target once, before dispatching anything:
   - If the commits input is non-empty, it is the pinned commit list.
-  - Otherwise the range input is the pinned range.
+  - Otherwise the range input is the pinned range. If it is three-dot
+    (A...B), resolve it to fixed SHAs, <git merge-base A B>..<git
+    rev-parse B>, and pin that two-dot range instead. Reviewers then
+    see only the PR's commits, and a fetch mid-review cannot move the
+    target.
   - Verify the revisions resolve and the diff is non-empty: git rev-parse
     plus git diff --stat <range> for a range, or git show --stat <sha>
     per commit for explicit SHAs. If the target is invalid or the diff is

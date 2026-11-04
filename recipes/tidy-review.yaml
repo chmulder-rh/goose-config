@@ -30,6 +30,11 @@ instructions: |
   Phase 1 — Pre-flight and revision pinning:
   - Explicit commits (empty means none): {{ commits }}
   - Fallback range: {{ range }}
+  If no commits are given and the range is three-dot (A...B), resolve
+  it to <git merge-base A B>..<git rev-parse B> and use that two-dot
+  range for every git command below and as the Scope. Three-dot git log
+  also lists commits that exist only on A; the resolved range lists
+  only the commits under review.
   Validate the target before anything else: confirm the revisions resolve
   (git rev-parse) and that the scope is non-empty (git log --oneline and
   git diff --stat over the range, or git show --stat per SHA). If invalid
