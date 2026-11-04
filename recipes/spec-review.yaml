@@ -192,8 +192,11 @@ instructions: |
   Rules: omit sections that have no findings, except the Traceability
   Matrix, which is mandatory; anchor every finding to a file:line
   reference; quote or paraphrase the criterion in every finding; within
-  each section, list higher-confidence findings first; keep the document
-  scannable — no filler prose.
+  each section, list higher-confidence findings first; the Verdict is
+  "misaligned" if any criterion is 🔴 Missing or 🔀 Deviates, "gaps found"
+  if only Partial, Unrequested Behavior, or Untested Criteria findings
+  exist, otherwise "fully aligned"; keep the document scannable — no filler
+  prose.
 
   Constraints:
   - This review is strictly read-only: do not modify files, do not post

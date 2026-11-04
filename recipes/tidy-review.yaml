@@ -136,9 +136,9 @@ instructions: |
   structure, feat/fix as behavior, docs/test/chore/build as other, and
   commits that mix concerns as mixed; anchor every finding to a commit
   SHA or a file:line reference; every Critical and Mixed finding must
-  include an actionable fix — a concrete git command or split plan; the
-  Verdict is "rebase/split required" if any Critical or Mixed finding
-  exists, "cleanup needed" if only tidying, smell, or nit findings exist,
+  include an actionable fix — a concrete git command or split plan; the Verdict is
+  "rebase/split required" if any Critical or Mixed finding exists, "cleanup
+  needed" if only tidying, smell, or nit findings exist,
   otherwise "ready to merge"; keep the document scannable.
 
   Constraints:

@@ -90,8 +90,9 @@ instructions: |
   Major for wrong behavior on realistic inputs, and Minor for wrong behavior
   on rare inputs; omit any section that has no findings, including Verified
   Safe; anchor every finding to a file:line reference; within each section,
-  list higher-confidence findings first; keep the document scannable — no
-  filler prose.
+  list higher-confidence findings first; the Verdict is "bugs found" if any
+  Critical, Major, or Minor finding exists, otherwise "no bugs found"; keep
+  the document scannable — no filler prose.
 
   Constraints:
   - This hunt is strictly read-only: do not modify the repo state.

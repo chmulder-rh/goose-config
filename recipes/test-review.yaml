@@ -145,7 +145,10 @@ instructions: |
   every finding to a file:line reference; every False Confidence and Weak
   finding must name the assertion that would restore signal or the
   deletion; within each section, list higher-confidence findings first;
-  keep the document scannable — no filler prose.
+  the Verdict is "false confidence" if any False Confidence finding
+  exists, "weak spots found" if only Weak Assertion or Wiring & Dead
+  Test findings exist, otherwise "tests constrain behavior"; keep the
+  document scannable — no filler prose.
 
   Constraints:
   - Read-only on files: do not modify the repo state. Unlike the sibling

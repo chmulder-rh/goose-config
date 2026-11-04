@@ -187,8 +187,10 @@ instructions: |
   Rules: omit sections that have no findings; anchor every finding to a
   file:line reference; tag every finding with exactly one category token —
   when a finding fits multiple categories, use the first listed; every
-  finding must include a concrete simpler alternative or deletion; keep the
-  document scannable.
+  finding must include a concrete simpler alternative or deletion; the Verdict is
+  "split required" if a Split Recommendation exists, "trim before merge" if
+  any other finding exists, otherwise "minimal & simple";
+  keep the document scannable.
 
   Constraints:
   - This review is strictly read-only: do not modify files, do not post

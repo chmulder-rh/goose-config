@@ -137,9 +137,11 @@ instructions: |
     the report's first finding. For a skipped reviewer, Verdict is
     "⏭️ Skipped" and Top finding is the abort reason; for a failed one,
     "❌ Failed" and the failure reason.
-  - The Overall Verdict is "needs attention" if any report contains a 🔴
-    or 🟠 finding, if the KISS review recommends pruning or splitting,
-    or if any reviewer failed; otherwise "ready to merge".
+  - The Overall Verdict is "needs attention" if any reviewer failed or
+    any report's Verdict is not its clean verdict; otherwise "ready to
+    merge". Clean verdicts: Bug "no bugs found", Tidy "ready to merge",
+    KISS "minimal & simple", Spec "fully aligned", Test "tests
+    constrain behavior". Skipped reviewers do not count.
   - Read-only: do not post to GitHub or Jira, do not modify files.
 
 prompt: |
