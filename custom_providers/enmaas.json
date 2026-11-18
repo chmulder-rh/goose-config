@@ -17,6 +17,13 @@
       "context_limit": 1048576,
       "input_token_cost": 0,
       "output_token_cost": 0
+    },
+    {
+      "name": "rits/meta-models/Muse-Spark-Open-816B-A42B-NVFP4",
+      "context_limit": 1048576,
+      "supports_vision": true,
+      "input_token_cost": 0,
+      "output_token_cost": 0
     }
   ],
   "requires_auth": true,
